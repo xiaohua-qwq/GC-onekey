@@ -37,9 +37,8 @@ function command_1(){
 	cd Grasscutter
 	chmod +x gradlew
 	./gradlew jar # Compile
-	wget "https://ghproxy.com/https://github.com/cool-chill/GC-onekey/raw/main/ssl/keystore.p12"
+	wget "https://ghproxy.com/https://github.com/fvkfgjf/GC-onekey/raw/main/keystore.p12"
 	git clone https://gitlab.com/YuukiPS/GC-Resources.git
-	cp -r Grasscutter_Resources/Resources .
 	mv Resources resources
 	rm -rf Grasscutter_Resources
 	chmod -R 777 /root/Genshin
