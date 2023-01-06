@@ -33,14 +33,12 @@ function command_1(){
 	fi
 	mkdir Genshin
 	cd Genshin
-	git clone https://github.com/Grasscutters/Grasscutter.git
+	git clone https://ghproxy.com/https://github.com/Grasscutters/Grasscutter.git
 	cd Grasscutter
 	chmod +x gradlew
 	./gradlew jar # Compile
-	wget "https://ghproxy.com/https://github.com/fvkfgjf/GC-onekey/raw/main/keystore.p12"
-	git clone https://gitlab.com/YuukiPS/GC-Resources.git
+	git clone https://ghproxy.com/https://ghproxy.com/https://gitlab.com/YuukiPS/GC-Resources.git
 	mv Resources resources
-	rm -rf Grasscutter_Resources
 	chmod -R 777 /root/Genshin
 	echo "服务端准备完毕！开始启动服务端！"
 	command_2
@@ -172,11 +170,12 @@ function command_6(){
 	rm -f Genshin/*.jar
 	cd Genshin
 	rm -f config.json
-	wget "https://ghproxy.com/https://github.com/Grasscutters/Grasscutter/releases/download/"$tag"/grasscutter-"${tag:1:5}".jar"
-	git clone https://ghproxy.com/https://github.com/tamilpp25/Grasscutter_Resources.git
-	cp -r Grasscutter_Resources/Resources .
+	git clone https://ghproxy.com/https://github.com/Grasscutters/Grasscutter.git
+	cd Grasscutter
+	chmod +x gradlew
+	./gradlew jar # Compile
+	git clone https://ghproxy.com/https://ghproxy.com/https://gitlab.com/YuukiPS/GC-Resources.git
 	mv Resources resources
-	rm -rf Grasscutter_Resources
 	chmod -R 777 /root/Genshin
 	echo "服务端更新完成！自动启动服务端！"
 	command_2
