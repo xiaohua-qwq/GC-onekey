@@ -21,26 +21,30 @@ function command_1(){
 		echo "java 安装完毕"
 	fi
 	#安装mingodb
-	wget https://list.1ioi.cn/d/resources/mongodb/mongodb-linux-x86_64-rhel70-4.0.28.tgz
-	tar -zxvf mongodb-linux-x86_64-rhel70-4.0.28.tgz
-	rm -f mongodb-linux-x86_64-rhel70-4.0.28.tgz
-	mv mongodb-linux-x86_64-rhel70-4.0.28 mongodb
+	cd /opt
+	wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-6.0.3.tgz
+	tar -zxvf mongodb-linux-x86_64-rhel70-6.0.3.tgz
+	rm -f mongodb-linux-x86_64-rhel70-6.0.3.tgz
+	mv mongodb-linux-x86_64-rhel70-6.0.3 mongodb
 	mkdir -p ./mongodb/data ./mongodb/log ./mongodb/conf
+	chmod -R 777 /opt/mongodb
 	echo "mongodb 安装完毕"
 	yum -y install -y screen
 	echo "screen 安装完毕"
 	yum -y install -y git
 	echo "git 安装完毕"
 	cd ~
-	if [ -d "Genshin" ]; then
-		rm -rf Genshin
+	if [ -d "Grasscutter" ]; then
+		rm -rf Grasscutter
 	fi
 	git clone https://ghproxy.com/https://github.com/Grasscutters/Grasscutter.git
 	cd Grasscutter
 	chmod +x gradlew
 	./gradlew jar # Compile
-	git clone https://ghproxy.com/https://ghproxy.com/https://gitlab.com/YuukiPS/GC-Resources.git
+	git clone https://gitlab.com/YuukiPS/GC-Resources.git
+	cd GC-Resources
 	mv Resources resources
+	mv resources /root/Grasscutter
 	chmod -R 777 /root/Grasscutter
 	echo "服务端准备完毕！开始启动服务端！"
 	command_2
@@ -52,19 +56,18 @@ function command_2(){
 	chmod -R 777 /root/Grasscutter
 	cd /opt/mongodb/
 	bin/mongod --port=27017 --dbpath=/opt/mongodb/data --logpath=/opt/mongodb/log/mongodb.log --fork
-	cd /root/Genshin
+	cd /root/Grasscutter
 	source /etc/profile
-	screen_name="Genshin" 
+	screen_name="Grasscutter" 
 	screen -dmS $screen_name
-	screen -x -S $screen_name -p 0 -X stuff "cd /root/Genshin && java -jar *.jar
-	"
+	screen -x -S $screen_name -p 0 -X stuff "cd /root/Grasscutter && java -jar *.jar"
 	sleep 5
 	my_ip=`curl -s https://ipv4.ipw.cn/api/ip/myip`
-	grep -q "127.0.0.1" /root/Genshin/config.json && sed -i 's#127.0.0.1#'$my_ip'#g' /root/Genshin/config.json || echo ""
-	grep -q ""$my_ip"" /root/Genshin/config.json && echo "config.json文件中IP已修改为"$my_ip",若此处IP不对，请自行前往更改!" || echo ""
-	sed -i 's/"language": "en_US"/"language": "zh_CN"/' /root/Genshin/config.json
-	sed -i 's/"fallback": "en_US"/"fallback": "zh_CN"/' /root/Genshin/config.json
-	sed -i 's/"document": "EN"/"document": "ZH"/' /root/Genshin/config.json
+	grep -q "127.0.0.1" /root/Grasscutter/config.json && sed -i 's#127.0.0.1#'$my_ip'#g' /root/Grasscutter/config.json || echo ""
+	grep -q ""$my_ip"" /root/Grasscutter/config.json && echo "config.json文件中IP已修改为"$my_ip",若此处IP不对，请自行前往更改!" || echo ""
+	sed -i 's/"language": "en_US"/"language": "zh_CN"/' /root/Grasscutter/config.json
+	sed -i 's/"fallback": "en_US"/"fallback": "zh_CN"/' /root/Grasscutter/config.json
+	sed -i 's/"document": "EN"/"document": "ZH"/' /root/Grasscutter/config.json
 	echo "服务端启动完毕!"
 }
 
@@ -77,14 +80,14 @@ function command_3(){
 }
 
 function command_4(){
-    screen -r Genshin
+    screen -r Grasscutter
 }
 
 function command_5(){
     command_3
 	while true
 	do
-		if [ ! -e "/root/Genshin/config.json" ]; then
+		if [ ! -e "/root/Grasscutter/config.json" ]; then
 			echo "未找到配置文件，如已安装游戏，请尝试卸载重装！"
 			break
 		fi
@@ -110,51 +113,51 @@ function command_5(){
 		echo "请输入操作编号："
 		read number
 		case $number in
-			"1")sed -i 's/"autoCreate":[^,]*/"autoCreate": true/' /root/Genshin/config.json
+			"1")sed -i 's/"autoCreate":[^,]*/"autoCreate": true/' /root/Grasscutter/config.json
 			echo "修改成功！"
 			;;
-			"2")sed -i 's/"autoCreate":[^,]*/"autoCreate": false/' /root/Genshin/config.json
+			"2")sed -i 's/"autoCreate":[^,]*/"autoCreate": false/' /root/Grasscutter/config.json
 			echo "修改成功！"
 			;;
-			"3")sed -i 's/"defaultPermissions":[^,]*/"defaultPermissions": [*]/' /root/Genshin/config.json
+			"3")sed -i 's/"defaultPermissions":[^,]*/"defaultPermissions": [*]/' /root/Grasscutter/config.json
 			echo "修改成功！"
 			;;
-			"4")sed -i 's/"defaultPermissions":[^,]*/"defaultPermissions": []/' /root/Genshin/config.json
+			"4")sed -i 's/"defaultPermissions":[^,]*/"defaultPermissions": []/' /root/Grasscutter/config.json
 			echo "修改成功！"
 			;;
 			"5")echo "请输入服务器名称："
 				read sever_name
-				sed -i 's/"defaultName":[^,]*/"defaultName": "'$sever_name'"/' /root/Genshin/config.json
+				sed -i 's/"defaultName":[^,]*/"defaultName": "'$sever_name'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"6")echo "请输入您想要设置的提示语："
 				read huanying
-				sed -i 's/"welcomeMessage":[^,]*/"welcomeMessage": "'$huanying'"/' /root/Genshin/config.json
+				sed -i 's/"welcomeMessage":[^,]*/"welcomeMessage": "'$huanying'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"7")echo "请输入指令小助手名称："
 				read nick_name
-				sed -i 's/"nickName":[^,]*/"nickName": "'$nick_name'"/' /root/Genshin/config.json
+				sed -i 's/"nickName":[^,]*/"nickName": "'$nick_name'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"8")echo "请输入指令小助手名称下方签名："
 				read nick_yu
-				sed -i 's/"signature":[^,]*/"signature": "'$nick_yu'"/' /root/Genshin/config.json
+				sed -i 's/"signature":[^,]*/"signature": "'$nick_yu'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"9")echo "请输入进服邮件标题："
 				read mail_title
-				sed -i 's/"title":[^,]*/"title": "'$mail_title'"/' /root/Genshin/config.json
+				sed -i 's/"title":[^,]*/"title": "'$mail_title'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"10")echo "请输入进服邮件内容："
 				read mail_content
-				sed -i 's/"content":.*$/"content": "'$mail_content'",/' /root/Genshin/config.json
+				sed -i 's/"content":.*$/"content": "'$mail_content'",/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"11")echo "请输入进服邮件发送者名称："
 				read mail_sender
-				sed -i 's/"sender":[^,]*/"sender": "'$mail_sender'"/' /root/Genshin/config.json
+				sed -i 's/"sender":[^,]*/"sender": "'$mail_sender'"/' /root/Grasscutter/config.json
 				echo "修改成功！"
 			;;
 			"0")echo "不要忘记启动游戏哦！"
@@ -167,10 +170,10 @@ function command_5(){
 function command_6(){
     command_3
 	cd ~
-	rm -rf Genshin/resources
-	rm -rf Genshin/data
-	rm -f Genshin/*.jar
-	cd Genshin
+	rm -rf Grasscutter/resources
+	rm -rf Grasscutter/data
+	rm -f Grasscutter/*.jar
+	cd Grasscutter
 	rm -f config.json
 	git clone https://ghproxy.com/https://github.com/Grasscutters/Grasscutter.git
 	cd Grasscutter
@@ -178,7 +181,7 @@ function command_6(){
 	./gradlew jar # Compile
 	git clone https://ghproxy.com/https://ghproxy.com/https://gitlab.com/YuukiPS/GC-Resources.git
 	mv Resources resources
-	chmod -R 777 /root/Genshin
+	chmod -R 777 /root/Grasscutter
 	echo "服务端更新完成！自动启动服务端！"
 	command_2
 }
@@ -191,7 +194,7 @@ function command_886(){
     echo "开始一键卸载环境及服务端"
 	cd ~
 	command_3
-	rm -fr /root/Genshin
+	rm -fr /root/Grasscutter
 	rm -fr /opt/mongodb
 	rm -fr /opt/jdk-17.0.4.1
 	yum -y remove screen
@@ -207,17 +210,17 @@ function command_886(){
 while true
 do
 	cd ~
-	if [ -d "/root/Genshin" ]; then
-		cd Genshin
-		genshin_local=`ls -f *.jar`
-		genshin_local=${genshin_local:12:5} 
-		echo $genshin_local
+	if [ -d "/root/Grasscutter" ]; then
+		cd Grasscutter
+		Grasscutter_local=`ls -f *.jar`
+		Grasscutter_local=${Grasscutter_local:12:5} 
+		echo $Grasscutter_local
 	fi
-	if [ ! -d "/root/Genshin" ]; then
-		genshin_local='未安装'
+	if [ ! -d "/root/Grasscutter" ]; then
+		Grasscutter_local='未安装'
 	fi
 	tag=`wget -qO- -t1 -T2 "https://api.github.com/repos/Grasscutters/Grasscutter/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g'`
-	genshin_new=${tag:1:5}
+	Grasscutter_new=${tag:1:5}
 	cd ~
 	echo "*--------------------------------------------------------*"
 	echo "               原神(Grasscutter)一键脚本                  "
@@ -234,8 +237,8 @@ do
 	echo "5. 修改配置(自动注册,自动授权,服务器名称,提示语等信息)    "
 	echo "  -修改配置默认会先关闭服务器，修改完毕后记得启动服务端   "
 	echo "                                                          "
-	echo "已安装服务端版本：$genshin_local                          "
-	echo "最新服务端版本：  $genshin_new                            "
+	echo "已安装服务端版本：$Grasscutter_local                          "
+	echo "最新服务端版本：  $Grasscutter_new                            "
 	echo "6. 更新服务端(不会删除玩家数据，config中配置会重置)       "
 	echo "                                                          "
 	echo "0. 退出菜单                                               "
