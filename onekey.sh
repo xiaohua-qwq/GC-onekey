@@ -7,16 +7,20 @@ function command_1(){
 	then
 		echo "java 已安装，跳过"
 	else
-		cd /opt
-		wget https://list.1ioi.cn/d/resources/java/jdk-17.0.4.1_linux-x64_bin.tar.gz 
-		tar -xzvf jdk-17.0.4.1_linux-x64_bin.tar.gz
-		rm -f jdk-17.0.4.1_linux-x64_bin.tar.gz
-		echo "export PATH=/opt/jdk-17.0.4.1/bin:$PATH" >> /etc/profile
-		echo "export JAVA_HOME=/opt/jdk-17.0.4.1" >> /etc/profile
-		echo "export CLASSPATH=." >> /etc/profile
+		
+		# 在 /usr/local 目录下安装jdk
+		cd /usr/local
+		wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
+		tar -zxvf jdk-17_linux-x64_bin.tar.gz 
+		# 将jdk-17改名为java
+		mv jdk-17.0.5 java
+		echo "export JAVA_HOME=/usr/local/java" >> /etc/profile
+		echo "export PATH=$PATH:$JAVA_HOME/bin" >> /etc/profile
+		echo "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar" >> /etc/profile
 		source /etc/profile
 		echo "java 安装完毕"
 	fi
+	#安装mingodb
 	wget https://list.1ioi.cn/d/resources/mongodb/mongodb-linux-x86_64-rhel70-4.0.28.tgz
 	tar -zxvf mongodb-linux-x86_64-rhel70-4.0.28.tgz
 	rm -f mongodb-linux-x86_64-rhel70-4.0.28.tgz
@@ -31,15 +35,13 @@ function command_1(){
 	if [ -d "Genshin" ]; then
 		rm -rf Genshin
 	fi
-	mkdir Genshin
-	cd Genshin
 	git clone https://ghproxy.com/https://github.com/Grasscutters/Grasscutter.git
 	cd Grasscutter
 	chmod +x gradlew
 	./gradlew jar # Compile
 	git clone https://ghproxy.com/https://ghproxy.com/https://gitlab.com/YuukiPS/GC-Resources.git
 	mv Resources resources
-	chmod -R 777 /root/Genshin
+	chmod -R 777 /root/Grasscutter
 	echo "服务端准备完毕！开始启动服务端！"
 	command_2
 }
@@ -47,7 +49,7 @@ function command_1(){
 
 function command_2(){
     echo "服务端启动中!"
-	chmod -R 777 /root/Genshin
+	chmod -R 777 /root/Grasscutter
 	cd /opt/mongodb/
 	bin/mongod --port=27017 --dbpath=/opt/mongodb/data --logpath=/opt/mongodb/log/mongodb.log --fork
 	cd /root/Genshin
