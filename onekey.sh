@@ -60,6 +60,8 @@ function command_2(){
 	source /etc/profile
 	screen_name="Grasscutter" 
 	screen -dmS $screen_name
+	cd /root/Grasscutter && java -jar *.jar
+	sleep 5
 	my_ip=`curl -s https://ipv4.ipw.cn/api/ip/myip`
 	grep -q "127.0.0.1" /root/Grasscutter/config.json && sed -i 's#127.0.0.1#'$my_ip'#g' /root/Grasscutter/config.json || echo ""
 	grep -q ""$my_ip"" /root/Grasscutter/config.json && echo "config.json文件中IP已修改为"$my_ip",若此处IP不对，请自行前往更改!" || echo ""
@@ -68,7 +70,7 @@ function command_2(){
 	sed -i 's/"document": "EN"/"document": "ZH"/' /root/Grasscutter/config.json
 	sleep 5
 	echo "ctrl+D切出"
-	cd /root/Grasscutter && java -jar *.jar
+	
 	
 }
 
