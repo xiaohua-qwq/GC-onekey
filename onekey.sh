@@ -22,7 +22,7 @@ function command_1(){
 	fi
 	#安装mingodb
 	cd /opt
-	wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-6.0.3.tgz
+	wget https://jihulab.com/GC-onekey/GC-onekey/-/raw/main/mongodb-linux-x86_64-rhel70-6.0.3.tgz
 	tar -zxvf mongodb-linux-x86_64-rhel70-6.0.3.tgz
 	rm -f mongodb-linux-x86_64-rhel70-6.0.3.tgz
 	mv mongodb-linux-x86_64-rhel70-6.0.3 mongodb
