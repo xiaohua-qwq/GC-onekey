@@ -60,7 +60,8 @@ function command_2(){
 	source /etc/profile
 	screen_name="Grasscutter" 
 	screen -dmS $screen_name
-	screen -x -S $screen_name -p 0 -X stuff "cd /root/Grasscutter && java -jar *.jar"
+	screen -x -S $screen_name -p 0 -X stuff "cd /root/Grasscutter && java -jar *.jar
+	"
 	sleep 5
 	my_ip=`curl -s https://ipv4.ipw.cn/api/ip/myip`
 	grep -q "127.0.0.1" /root/Grasscutter/config.json && sed -i 's#127.0.0.1#'$my_ip'#g' /root/Grasscutter/config.json || echo ""
